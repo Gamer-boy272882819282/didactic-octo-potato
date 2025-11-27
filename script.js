@@ -38,48 +38,14 @@ function createMatrix(w, h) {
 }
 
 function createPiece(type) {
-  if (type === "T") {
-    return [
-      [0, 1, 0],
-      [1, 1, 1],
-      [0, 0, 0],
-    ];
-  } else if (type === "O") {
-    return [
-      [1, 1],
-      [1, 1],
-    ];
-  } else if (type === "L") {
-    return [
-      [0, 0, 1],
-      [1, 1, 1],
-      [0, 0, 0],
-    ];
-  } else if (type === "J") {
-    return [
-      [1, 0, 0],
-      [1, 1, 1],
-      [0, 0, 0],
-    ];
-  } else if (type === "I") {
-    return [
-      [0, 0, 0, 0],
-      [1, 1, 1, 1],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-    ];
-  } else if (type === "S") {
-    return [
-      [0, 1, 1],
-      [1, 1, 0],
-      [0, 0, 0],
-    ];
-  } else if (type === "Z") {
-    return [
-      [1, 1, 0],
-      [0, 1, 1],
-      [0, 0, 0],
-    ];
+  switch (type) {
+    case "T": return [[0,1,0],[1,1,1],[0,0,0]];
+    case "O": return [[1,1],[1,1]];
+    case "L": return [[0,0,1],[1,1,1],[0,0,0]];
+    case "J": return [[1,0,0],[1,1,1],[0,0,0]];
+    case "I": return [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]];
+    case "S": return [[0,1,1],[1,1,0],[0,0,0]];
+    case "Z": return [[1,1,0],[0,1,1],[0,0,0]];
   }
 }
 
@@ -87,7 +53,7 @@ function drawMatrix(matrix, offset) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
-        ctx.fillStyle = "cyan";
+        ctx.fillStyle = "#00FFFF"; 
         ctx.fillRect(x + offset.x, y + offset.y, 1, 1);
       }
     });
@@ -126,9 +92,8 @@ function playerReset() {
     pieces[(pieces.length * Math.random()) | 0]
   );
   player.pos.y = 0;
-  player.pos.x =
-    ((arena[0].length / 2) | 0) -
-    ((player.matrix[0].length / 2) | 0);
+  player.pos.x = ((arena[0].length / 2) | 0) -
+                 ((player.matrix[0].length / 2) | 0);
 
   if (collide(arena, player)) {
     arena.forEach(row => row.fill(0));
@@ -170,7 +135,9 @@ function update(time = 0) {
   requestAnimationFrame(update);
 }
 
-// KEYBOARD CONTROLS
+/* -----------------------------
+   KEYBOARD CONTROLS
+--------------------------------*/
 document.addEventListener("keydown", event => {
   if (event.key === "ArrowLeft") playerMove(-1);
   else if (event.key === "ArrowRight") playerMove(1);
@@ -178,19 +145,35 @@ document.addEventListener("keydown", event => {
   else if (event.key === "ArrowUp") rotate(player.matrix);
 });
 
-// TOUCH CONTROLS (iPad / Mobile)
-document.getElementById("left-btn").addEventListener("touchstart", () => {
-  playerMove(-1);
-});
-document.getElementById("right-btn").addEventListener("touchstart", () => {
-  playerMove(1);
-});
-document.getElementById("down-btn").addEventListener("touchstart", () => {
-  playerDrop();
-});
-document.getElementById("rotate-btn").addEventListener("touchstart", () => {
-  rotate(player.matrix);
-});
+/* -----------------------------
+   TOUCH / MOBILE CONTROLS
+   (Now uses pointer events)
+--------------------------------*/
+
+function bindControl(id, action) {
+  const btn = document.getElementById(id);
+
+  btn.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    btn.classList.add("pressed");
+    action();
+  });
+
+  btn.addEventListener("pointerup", () => {
+    btn.classList.remove("pressed");
+  });
+
+  btn.addEventListener("pointerleave", () => {
+    btn.classList.remove("pressed");
+  });
+}
+
+bindControl("left-btn", () => playerMove(-1));
+bindControl("right-btn", () => playerMove(1));
+bindControl("down-btn", () => playerDrop());
+bindControl("rotate-btn", () => rotate(player.matrix));
+
+/* -------------------------------- */
 
 const arena = createMatrix(12, 20);
 
