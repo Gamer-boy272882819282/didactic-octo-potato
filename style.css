@@ -16,27 +16,58 @@ body {
 
 .neon-title {
   margin-top: 28px;
-  margin-bottom: 0;
-  font-size: 2.6rem;
+  margin-bottom: 2px;
+  font-size: 2.4rem;
   color: #0ff;
   text-shadow:
     0 0 10px #0ff,
     0 0 20px #09f,
     0 0 40px #0ff;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   font-weight: bold;
 }
 
 .canvas-container {
-  /* Easy future score/next preview positioning */
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+  width: fit-content;
 }
 
+/* HUD: score and next preview */
+.hud {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+#score-board, #next-piece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #0ff;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  color: #0ff;
+  text-shadow: 0 0 12px #0ff;
+}
+
+.score-value {
+  font-size: 1.2rem;
+  margin-top: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  text-shadow: 0 0 10px #0ff;
+}
+
+/* main canvas */
 canvas#tetris {
-  margin-top: 20px;
+  margin-top: 10px;
   border: 3px solid #00f2ff;
   border-radius: 10px;
   box-shadow: 0 0 20px #00f2ff, 0 0 60px #0ff inset;
@@ -47,11 +78,21 @@ canvas#tetris {
   outline: none;
 }
 
+/* next preview */
+canvas#next {
+  width: 80px;
+  height: 80px;
+  border: 2px solid rgba(0,255,255,0.12);
+  border-radius: 6px;
+  background: #000;
+  box-shadow: 0 0 10px rgba(0,255,255,0.06);
+}
+
 /* -------------------------
    TOUCH CONTROLS
 ---------------------------*/
-#touch-controls {
-  margin-top: 24px;
+.touch-controls {
+  margin-top: 18px;
   display: flex;
   justify-content: center;
   gap: 18px;
@@ -59,19 +100,20 @@ canvas#tetris {
   z-index: 15;
 }
 
-#touch-controls button {
+.touch-controls button {
   background: #111;
   color: #0ff;
   border: 2px solid #0ff;
   border-radius: 12px;
-  padding: 16px 26px;
-  font-size: 30px;
-  box-shadow: 0 0 16px #0ff, 0 0 2px #222 inset;
+  padding: 14px 22px;
+  font-size: 26px;
+  box-shadow: 0 0 14px #0ff, 0 0 2px #222 inset;
   transition: transform 0.18s, background 0.18s, box-shadow 0.2s;
   outline: none;
 }
-#touch-controls button:active,
-#touch-controls button.pressed {
+
+.touch-controls button:active,
+.touch-controls button.pressed {
   transform: scale(0.93);
   background: #033;
   box-shadow: 0 0 20px #0ff;
@@ -87,9 +129,9 @@ canvas#tetris {
   background: #222;
   border: 2px solid #0ff;
   color: #0ff;
-  padding: 11px 16px;
+  padding: 10px 14px;
   border-radius: 10px;
-  font-size: 22px;
+  font-size: 18px;
   cursor: pointer;
   box-shadow: 0 0 16px #0ff, 0 0 2px #022;
   transition: background 0.22s, box-shadow 0.21s;
@@ -107,22 +149,22 @@ canvas#tetris {
 ---------------------------*/
 .settings-panel {
   position: absolute;
-  top: 88px;
+  top: 80px;
   right: 18px;
   background: rgba(5, 5, 5, 0.98);
   border: 2px solid #0ff;
   border-radius: 12px;
-  padding: 22px 20px 16px;
-  width: 270px;
+  padding: 18px 16px;
+  width: 280px;
   max-width: 94vw;
   box-shadow: 0 0 28px #0ff, 0 0 8px #00f2ff inset;
   text-align: left;
   z-index: 100;
-  animation: fadeIn 0.27s linear;
+  animation: fadeIn 0.22s linear;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-14px);}
+  from { opacity: 0; transform: translateY(-10px);}
   to   { opacity: 1; transform: translateY(0);}
 }
 
@@ -132,9 +174,9 @@ canvas#tetris {
 
 .settings-panel h2 {
   text-align: center;
-  margin: 0 0 15px 0;
+  margin: 0 0 12px 0;
   color: #0ff;
-  font-size: 1.18em;
+  font-size: 1.08em;
   font-weight: bold;
   text-shadow: 0 0 13px #0ff;
 }
@@ -143,92 +185,62 @@ canvas#tetris {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 14px 0;
-  font-size: 18px;
+  margin: 12px 0;
+  font-size: 16px;
   gap: 8px;
 }
 
 .settings-panel input[type="checkbox"],
 .settings-panel input[type="range"] {
   accent-color: #0ff;
-  margin-left: 14px;
+  margin-left: 8px;
 }
 
 #speed-slider {
-  width: 110px;
+  width: 120px;
 }
 
 #close-settings, .close-settings {
   width: 100%;
-  margin-top: 18px;
-  padding: 12px 0;
+  margin-top: 12px;
+  padding: 10px 0;
   background: #222;
   color: #0ff;
   border: 2px solid #0ff;
   border-radius: 10px;
   box-shadow: 0 0 12px #0ff;
-  font-size: 17px;
+  font-size: 15px;
   cursor: pointer;
   transition: background 0.21s, box-shadow 0.2s;
 }
 
-#close-settings:hover,
-#close-settings:focus {
-  background: #033;
-  box-shadow: 0 0 20px #09f;
-}
-
-/* Optional score display for future */
-.score-neon {
-  color: #0ff;
-  font-size: 1.1em;
-  margin: 5px auto;
-  text-align: center;
-  text-shadow: 0 0 10px #0ff, 0 0 5px #09f;
-  font-family: 'Courier New', Courier, monospace;
-}
-
-/* -------------------------
-   MOBILE FRIENDLY
----------------------------*/
+/* MOBILE */
 @media (max-width: 700px) {
   canvas#tetris {
-    width: 96vw;
-    height: 52vw;
+    width: 92vw;
+    height: calc(92vw * (20 / 12));
     min-width: 200px;
-    min-height: 350px;
-    max-width: 98vw;
-    max-height: 75vh;
+    min-height: 320px;
   }
   .settings-panel {
-    top: 66px;
-    right: 4px;
-    width: 95vw;
-    padding: 16px 4vw 12px;
+    top: 68px;
+    right: 8px;
+    width: 94vw;
+    padding: 12px;
   }
   .settings-btn {
     top: 10px;
     right: 8px;
-    font-size: 20px;
-    padding: 7px 12px;
+    font-size: 16px;
+    padding: 8px 10px;
   }
-  #touch-controls {
-    margin-top: 14px;
+  .touch-controls {
     gap: 8vw;
   }
 }
 
 @media (max-width: 430px) {
-  .neon-title {
-    font-size: 1.3rem;
-    margin-top: 11px;
-  }
-  #touch-controls button {
-    font-size: 22px;
-    padding: 12px 14px;
-  }
-  .settings-panel {
-    font-size: 15px;
-    padding: 12px 2vw 9px;
-  }
+  .neon-title { font-size: 1.3rem; margin-top: 10px; }
+  .touch-controls button { font-size: 20px; padding: 12px 12px; }
+  .settings-panel { font-size: 13px; padding: 10px; }
 }
